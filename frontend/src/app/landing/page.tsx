@@ -107,7 +107,7 @@ const HeroSection = () => {
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden">
       <div className="absolute inset-0">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+        <video autoPlay loop muted playsInline preload="auto" className="w-full h-full object-cover">
           <source src="/images/hero-video.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-[#0F1B33]/90 via-[#0F1B33]/70 to-transparent" />

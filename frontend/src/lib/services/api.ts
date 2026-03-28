@@ -40,6 +40,17 @@ const normalizePage = (res: any) => ({
   data: (res.data || []).map(normalizeContainer),
 });
 
+const fetchFallback = async (filename: string) => {
+  if (typeof window === 'undefined') return null; // Only run on client
+  try {
+    const res = await fetch(`/data/${filename}`);
+    if (res.ok) return await res.json();
+  } catch (e) {
+    console.error(`Failed to load ${filename}`, e);
+  }
+  return null;
+};
+
 // ---------------------------------------------------------------------------
 // Auth — tries backend first, falls back to localStorage for deployed builds
 // ---------------------------------------------------------------------------
@@ -109,7 +120,7 @@ export const getSummary = async () => {
     const r = await api.get('/summary');
     return r.data;
   } catch {
-    return { total_containers: 54000, high_risk: 4200, low_risk: 49800, anomalies: 1800 };
+    return (await fetchFallback('summary.json')) || { total_containers: 54003, critical: 1927, high_risk: 3538, medium: 27138, low_risk: 21400, anomalies: 5465 };
   }
 };
 
@@ -118,7 +129,7 @@ export const getRiskDistribution = async () => {
     const r = await api.get('/risk-distribution');
     return r.data;
   } catch {
-    return { low: 38000, medium: 12000, high: 3200, critical: 800 };
+    return (await fetchFallback('risk-distribution.json')) || { low: 21400, medium: 27138, high: 3538, critical: 1927 };
   }
 };
 
@@ -141,7 +152,7 @@ export const getCriticalContainersList = async (page = 1, limit = 500) => {
     result.data = result.data.map((c: any) => ({ ...c, risk_level: 'CRITICAL' }));
     return result;
   } catch {
-    return { data: [], total: 0, page, limit, total_pages: 0 };
+    return (await fetchFallback('critical-containers.json')) || { data: [], total: 0, page, limit, total_pages: 0 };
   }
 };
 
@@ -152,7 +163,7 @@ export const getHighRiskContainersList = async (page = 1, limit = 500) => {
     result.data = result.data.map((c: any) => ({ ...c, risk_level: 'HIGH' }));
     return result;
   } catch {
-    return { data: [], total: 0, page, limit, total_pages: 0 };
+    return (await fetchFallback('high-risk-containers.json')) || { data: [], total: 0, page, limit, total_pages: 0 };
   }
 };
 
@@ -245,7 +256,7 @@ export const getAnomalies = async (page = 1, limit = 100) => {
     const r = await api.get('/anomalies', { params: { page, limit } });
     return normalizePage(r.data);
   } catch {
-    return { data: [], total: 0, page, limit, total_pages: 0 };
+    return (await fetchFallback('anomalies.json')) || { data: [], total: 0, page, limit, total_pages: 0 };
   }
 };
 
@@ -278,14 +289,7 @@ export const getTradeRoutes = async () => {
     }
     return r.data;
   } catch {
-    return {
-      routes: [
-        { origin: 'CN', destination: 'IN', risk: 'high',   lat1: 31.23, lon1: 121.47, lat2: 19.08, lon2: 72.88 },
-        { origin: 'AE', destination: 'IN', risk: 'medium', lat1: 25.20, lon1: 55.27,  lat2: 13.08, lon2: 80.27 },
-        { origin: 'SG', destination: 'IN', risk: 'low',    lat1: 1.35,  lon1: 103.82, lat2: 22.57, lon2: 88.37 },
-      ],
-      stats: { active_routes: 3, high_risk_routes: 1, tracked_countries: 3 },
-    };
+    return (await fetchFallback('trade-routes.json')) || { routes: [], stats: { active_routes: 0, high_risk_routes: 0, tracked_countries: 0 } };
   }
 };
 
@@ -294,14 +298,13 @@ export const getTradeNetwork = async () => {
     const r = await api.get('/trade-network');
     return r.data;
   } catch {
-    return { nodes: [], edges: [] };
+    return (await fetchFallback('trade-network.json')) || { nodes: [], edges: [] };
   }
 };
 
 export const getRiskTrends = async () => {
   try {
     const r = await api.get('/risk-trends');
-    // Backend returns [{date, total, high_risk}] — map to chart format
     if (Array.isArray(r.data) && r.data.length > 0 && r.data[0].date) {
       return r.data.map((d: any) => ({
         month:     d.date?.slice(0, 7) ?? d.month ?? '',
@@ -312,7 +315,7 @@ export const getRiskTrends = async () => {
     }
     return r.data;
   } catch {
-    return [];
+    return (await fetchFallback('risk-trends.json')) || [];
   }
 };
 
@@ -324,10 +327,7 @@ export const getCountryRisk = async () => {
     const r = await api.get('/country-risk');
     return r.data;
   } catch {
-    return [
-      { country: 'CN', risk_count: 45 }, { country: 'AE', risk_count: 30 },
-      { country: 'SG', risk_count: 20 }, { country: 'HK', risk_count: 15 },
-    ];
+    return (await fetchFallback('country-risk.json')) || [];
   }
 };
 
@@ -336,10 +336,7 @@ export const getImporterRisk = async () => {
     const r = await api.get('/importer-risk');
     return r.data;
   } catch {
-    return [
-      { importer: 'ABC Imports', risk_count: 12 },
-      { importer: 'Global Trade', risk_count: 10 },
-    ];
+    return (await fetchFallback('importer-risk.json')) || [];
   }
 };
 

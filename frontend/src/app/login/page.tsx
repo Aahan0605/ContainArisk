@@ -59,7 +59,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen relative flex items-center p-6 md:p-16 lg:p-24 overflow-hidden text-white font-sans bg-[#111]">
       <div className="absolute inset-0 z-0">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+        <video autoPlay loop muted playsInline preload="auto" className="w-full h-full object-cover">
           <source src="/images/hero-video.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-[#0F1B33]/90 via-[#0F1B33]/70 to-transparent" />
