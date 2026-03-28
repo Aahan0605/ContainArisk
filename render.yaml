@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: containarisk-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PORT
+        value: 10000
