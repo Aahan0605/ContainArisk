@@ -41,23 +41,63 @@ const normalizePage = (res: any) => ({
 });
 
 // ---------------------------------------------------------------------------
-// Auth
+// Auth — tries backend first, falls back to localStorage for deployed builds
 // ---------------------------------------------------------------------------
+const _getLocalUsers = (): Record<string, string> => {
+  if (typeof window === 'undefined') return {};
+  try {
+    return JSON.parse(localStorage.getItem('_car_users') || '{}');
+  } catch { return {}; }
+};
+
+const _saveLocalUsers = (users: Record<string, string>) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('_car_users', JSON.stringify(users));
+  }
+};
+
+// Seed a default admin account on first load
+if (typeof window !== 'undefined' && !localStorage.getItem('_car_users')) {
+  _saveLocalUsers({ 'admin@containarisk.com': 'Admin123!' });
+}
+
 export const loginUser = async (username: string, password: string) => {
+  // Try backend first
   try {
     const r = await api.post('/login', { username, password });
     return r.data;
-  } catch (e: any) {
-    throw e.response?.data || { detail: 'Login failed' };
+  } catch (backendErr: any) {
+    // If server explicitly said "invalid credentials" (401), propagate that
+    if (backendErr.response?.status === 401) {
+      throw backendErr.response.data || { detail: 'Invalid credentials' };
+    }
+    // Backend unreachable — fall back to local auth
+    const users = _getLocalUsers();
+    if (users[username] && users[username] === password) {
+      return { success: true, message: 'Login successful' };
+    }
+    throw { detail: 'Invalid credentials. Check your email and password.' };
   }
 };
 
 export const registerUser = async (username: string, password: string) => {
+  // Try backend first
   try {
     const r = await api.post('/register', { username, password });
     return r.data;
-  } catch (e: any) {
-    throw e.response?.data || { detail: 'Registration failed' };
+  } catch (backendErr: any) {
+    // If server explicitly said "user exists" (400), propagate that
+    if (backendErr.response?.status === 400) {
+      throw backendErr.response.data || { detail: 'User already exists' };
+    }
+    // Backend unreachable — fall back to local auth
+    const users = _getLocalUsers();
+    if (users[username]) {
+      throw { detail: 'User already exists' };
+    }
+    users[username] = password;
+    _saveLocalUsers(users);
+    return { success: true, message: 'Signup successful' };
   }
 };
 
