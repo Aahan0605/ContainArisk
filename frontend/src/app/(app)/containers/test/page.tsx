@@ -7,9 +7,10 @@ export default function TestPage() {
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/containers/high-risk?page=1&limit=5")
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    fetch(`${baseURL}/containers/high-risk?page=1&limit=5`)
       .then(r => r.json()).then(setHigh).catch(e => setErr("HIGH ERR: " + e));
-    fetch("http://localhost:8000/containers/low-risk?page=1&limit=5")
+    fetch(`${baseURL}/containers/low-risk?page=1&limit=5`)
       .then(r => r.json()).then(setLow).catch(e => setErr("LOW ERR: " + e));
   }, []);
 

@@ -65,7 +65,8 @@ const MapComponent = ({ routes = [] }: MapComponentProps) => {
     if (!selectedCountry) return;
     setLoadingContainers(true);
     const rl = containerRiskFilter === "ALL" ? "" : containerRiskFilter;
-    axios.get("http://localhost:8000/containers/by-country", {
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    axios.get(`${baseURL}/containers/by-country`, {
       params: { country: selectedCountry, ...(rl ? { risk_level: rl } : {}), limit: 50 },
     })
       .then(r => setCountryContainers(r.data.data || []))
