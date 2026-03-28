@@ -1,0 +1,61 @@
+
+> frontend-next@0.1.0 dev
+> next dev -p 3002
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3002
+
+ ✓ Starting...
+ ✓ Ready in 1591ms
+ ○ Compiling /dashboard ...
+ ⚠ ./src/components/AnimatedCounter.tsx
+Attempted import error: 'animejs' does not contain a default export (imported as 'anime').
+
+Import trace for requested module:
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+
+./src/components/AnimatedCounter.tsx
+Attempted import error: 'animejs' does not contain a default export (imported as 'anime').
+
+Import trace for requested module:
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+ HEAD /dashboard 200 in 9562ms
+ ⚠ ./src/components/AnimatedCounter.tsx
+Attempted import error: 'animejs' does not contain a default export (imported as 'anime').
+
+Import trace for requested module:
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+
+./src/components/AnimatedCounter.tsx
+Attempted import error: 'animejs' does not contain a default export (imported as 'anime').
+
+Import trace for requested module:
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+ ⨯ ./node_modules/animejs/dist/modules/index.js
+Error: ENOENT: no such file or directory, open '/Users/aahanajaygajera/Desktop/ContainArisk/frontend-next/node_modules/animejs/dist/modules/index.js'
+
+Import trace for requested module:
+./node_modules/animejs/dist/modules/index.js
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/aahanajaygajera/Desktop/ContainArisk/frontend-next/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/aahanajaygajera/Desktop/ContainArisk/frontend-next/.next/cache/webpack/client-development/0.pack.gz'
+ ⨯ ./node_modules/animejs/dist/modules/index.js
+Error: ENOENT: no such file or directory, open '/Users/aahanajaygajera/Desktop/ContainArisk/frontend-next/node_modules/animejs/dist/modules/index.js'
+
+Import trace for requested module:
+./node_modules/animejs/dist/modules/index.js
+./src/components/AnimatedCounter.tsx
+./src/app/dashboard/page.tsx
+ ✓ Compiled /dashboard in 1822ms (1805 modules)
+ ✓ Compiled in 835ms (1805 modules)
+ ✓ Compiled in 512ms (1805 modules)
+ ✓ Compiled in 526ms (1805 modules)
+ ✓ Compiled in 673ms (1805 modules)
+ ✓ Compiled in 628ms (1805 modules)
+ ✓ Compiled in 282ms (1805 modules)
+ ✓ Compiled in 14.3s (1805 modules)
+ ✓ Compiled in 5.3s (1805 modules)

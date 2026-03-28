@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Backend Server",
+			"type": "shell",
+			"command": "cd /Users/aahanajaygajera/Desktop/ContainArisk/backend && PYTHONPATH=/Users/aahanajaygajera/Desktop/ContainArisk/backend /Users/aahanajaygajera/Desktop/ContainArisk/backend/.venv/bin/python -c \"import uvicorn; uvicorn.run('main:app', host='0.0.0.0', port=8000)\""
+		},
+		{
+			"label": "Start Backend Server",
+			"type": "shell",
+			"command": "cd /Users/aahanajaygajera/Desktop/ContainArisk/backend && PYTHONPATH=/Users/aahanajaygajera/Desktop/ContainArisk/backend /Users/aahanajaygajera/Desktop/ContainArisk/backend/.venv/bin/python -c \"import uvicorn; uvicorn.run('main:app', host='0.0.0.0', port=8000)\""
+		}
+	]
+}

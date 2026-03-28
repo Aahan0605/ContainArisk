@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+.env.local
+.env.production.local
+.next
+node_modules
+npm-debug.log*
+.DS_Store
+*.pem
+.vercel
+coverage
+dist
+build
+.turbo

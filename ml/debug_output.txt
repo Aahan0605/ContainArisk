@@ -1,0 +1,541 @@
+﻿python : C:\Users\pri
+ya\AppData\Local\Prog
+rams\Python\Python313
+\Lib\site-packages\da
+teutil\tz\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+At line:1 char:32
++ ... PYTHONIOENCODIN
+G='utf-8'; python 
+-Wall 
+ml/train_model.py 
+2>&1 | Out-F ...
++                    
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (C:\User   
+ s\priya\... date    
+time.UTC).:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+C:\Users\priya\AppDat
+a\Local\Programs\Pyth
+on\Python313\Lib\site
+-packages\dateutil\tz
+\tz.py:37: 
+DeprecationWarning: d
+atetime.datetime.utcf
+romtimestamp() is 
+deprecated and 
+scheduled for 
+removal in a future 
+version. Use 
+timezone-aware 
+objects to represent 
+datetimes in UTC: dat
+etime.datetime.fromti
+mestamp(timestamp, 
+datetime.UTC).
+  EPOCH = datetime.da
+tetime.utcfromtimesta
+mp(0)
+======================================================================
+  SHIPMENT ANOMALY DETECTION ΓÇö TRAINING PIPELINE
+======================================================================
+
+[1/12] Loading historical dataset ...
+  Rows : 54,000
+  Cols : 16
+  Clearance distribution:
+Clearance_Status
+Clear       42347
+Low Risk    11108
+Critical      545
+
+[2/12] Engineering features (fit mode) ...
+  Feature columns : 58
+  Rows            : 54,000
+
+[3/12] Validating schema (Historical) ...
+
+  Schema Validation Report -- Historical Dataset
+  ==================================================
+  Shape: (54000, 58)
+  Expected schema columns: 51
+  Present schema columns:  51
+  [OK] All 51 schema columns present
+  Column order match: True
+  [OK] All columns are numeric
+  NaN count: 0
+  [OK] No NaN values
+  Inf count: 0
+  [OK] No infinite values
+
+  Validation Status: PASSED
+  ==================================================
+
+[4/12] Separating features and target ...
+  Features shape : (54000, 57)
+  Target balance : {0: 53455, 1: 545}
+  Anomaly rate   : 0.0101
+
+[5/12] Splitting data (80/20, stratified) ...
+  Train : 43,200 samples
+  Test  : 10,800 samples
+
+[6/12] Building RandomForest with regularisation ...
+  Parameters:
+    class_weight              = balanced
+    max_depth                 = 10
+    max_features              = sqrt
+    min_samples_leaf          = 5
+    min_samples_split         = 10
+    n_estimators              = 100
+
+[7/12] 5-fold Stratified Cross Validation (Historical) ...
+
+  Metric              Mean      Std
+  ---------------------------------
+  Accuracy          0.9967   0.0009
+  Precision         0.7862   0.0402
+  Recall            0.9242   0.0441
+  F1 Score          0.8494   0.0394
+
+  Per-fold Accuracy : [0.9968 0.995  0.9975 0.9969 0.9973]
+  Per-fold F1       : [0.8478 0.7749 0.883  0.8615 0.8796]
+
+[8/12] Training model on full training set ...
+  Training complete.
+
+[9/12] Evaluating on held-out historical test set ...
+
+  Test Accuracy  : 0.9976
+  Test Precision : 0.8487
+  Test Recall    : 0.9266
+  Test F1 Score  : 0.8860
+
+  Mean CV Accuracy : 0.9967
+  Std  CV Accuracy : 0.0009
+
+  Confusion Matrix:
+               Pred 0   Pred 1
+      Actual 0  10673       18
+      Actual 1      8      101
+
+  Classification Report:
+              precision    recall  f1-score   support
+
+      Normal     0.9993    0.9983    0.9988     10691
+     Anomaly     0.8487    0.9266    0.8860       109
+
+    accuracy                         0.9976     10800
+   macro avg     0.9240    0.9625    0.9424     10800
+weighted avg     0.9977    0.9976    0.9976     10800
+
+[10/12] Feature Importances (Top 20):
+    1. weight_risk_score                        0.2089
+    2. hs_code_risk_score                       0.1899
+    3. weight_deviation_percent                 0.1460
+    4. weight_ratio                             0.0808
+    5. risk_percentile                          0.0725
+    6. dwell_time_hours                         0.0452
+    7. normalized_dwell_time                    0.0380
+    8. route_risk_rate                          0.0355
+    9. network_risk_propagation                 0.0304
+   10. shipment_chain_risk                      0.0253
+   11. clearance_delay_indicator                0.0232
+   12. entity_route_risk_score                  0.0227
+   13. hs_code                                  0.0143
+   14. weight_difference                        0.0082
+   15. value_risk_score                         0.0069
+   16. value_deviation_from_hs_average          0.0036
+   17. measured_weight                          0.0025
+   18. origin_country_freq                      0.0025
+   19. commodity_price_deviation                0.0024
+   20. log_value_weight_ratio                   0.0023
+
+======================================================================
+[11/12] Saving model and feature statistics ...
+  Model saved -> C:\Users\priya\.gemini\antigravity\scratch\ContainArisk\ml\models\anomaly_detection_model.pkl
+  Feature stats saved -> C:\Users\priya\.gemini\antigravity\scratch\ContainArisk\ml\models\feature_stats.pkl
+
+======================================================================
+[12/12] Real-Time Dataset Evaluation ...
+======================================================================
+
+  Loading real-time dataset ...
+  Rows : 8,481
+  Cols : 16
+
+  Engineering features (inference mode) ...
+  Feature columns : 58
+  Rows            : 8,481
+
+  Validating schema (Real-Time) ...
+
+  Schema Validation Report -- Real-Time Dataset
+  ==================================================
+  Shape: (8481, 58)
+  Expected schema columns: 51
+  Present schema columns:  51
+  [OK] All 51 schema columns present
+  Column order match: True
+  [OK] All columns are numeric
+  NaN count: 0
+  [OK] No NaN values
+  Inf count: 0
+  [OK] No infinite values
+
+  Validation Status: PASSED
+  ==================================================
+
+  Real-Time Features shape : (8481, 57)
+  Real-Time Target balance : {0: 8408, 1: 73}
+  Real-Time Anomaly rate   : 0.0086
+
+  --- Real-Time Direct Evaluation ---
+
+  Real-Time Accuracy  : 0.9929
+  Real-Time Precision : 0.7407
+  Real-Time Recall    : 0.2740
+  Real-Time F1 Score  : 0.4000
+
+  Real-Time Confusion Matrix:
+               Pred 0   Pred 1
+      Actual 0   8401        7
+      Actual 1     53       20
+
+  Real-Time Classification Report:
+              precision    recall  f1-score   support
+
+      Normal     0.9937    0.9992    0.9964      8408
+     Anomaly     0.7407    0.2740    0.4000        73
+
+    accuracy                         0.9929      8481
+   macro avg     0.8672    0.6366    0.6982      8481
+weighted avg     0.9916    0.9929    0.9913      8481
+
+  --- Real-Time 5-Fold Cross Validation (Performance Check) ---
+  NOTE: This re-fits on real-time folds for scoring purposes only.
+        The production model remains trained on historical data.
+
+  Metric              Mean      Std
+  ---------------------------------
+  Accuracy          0.9974   0.0008
+  Precision         0.9500   0.1000
+  Recall            0.7533   0.0333
+  F1 Score          0.8360   0.0346
+
+  Per-fold Accuracy : [0.9959 0.9982 0.9976 0.9976 0.9976]
+  Per-fold F1       : [0.7742 0.88   0.8333 0.8462 0.8462]
+
+======================================================================
+  PIPELINE SUMMARY
+======================================================================
+  Historical Schema Valid  : YES
+  Real-Time Schema Valid   : YES
+  Historical CV Accuracy   : 0.9967 +/- 0.0009
+  Historical Test Accuracy : 0.9976
+  Real-Time Accuracy       : 0.9929
+  Real-Time CV Accuracy    : 0.9974 +/- 0.0008
+  Model saved to           : C:\Users\priya\.gemini\antigravity\scratch\ContainArisk\ml\models\anomaly_detection_model.pkl
+  Stats saved to           : C:\Users\priya\.gemini\antigravity\scratch\ContainArisk\ml\models\feature_stats.pkl
+
+======================================================================
+  TRAINING COMPLETE
+======================================================================

@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Frontend Server",
+			"type": "shell",
+			"command": "npm --prefix /Users/aahanajaygajera/Desktop/ContainArisk/frontend run dev",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
