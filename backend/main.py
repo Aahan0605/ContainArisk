@@ -29,11 +29,18 @@ _df: pd.DataFrame = pd.DataFrame()
 
 def _load_csv():
     global _df
-    hist = os.path.join(DATA_DIR, "cleaned_historical_data.csv")
-    rt   = os.path.join(DATA_DIR, "cleaned_realtime_data.csv")
+    hist = os.path.join(DATA_DIR, "cleaned_historical_data.csv.gz")
+    rt   = os.path.join(DATA_DIR, "cleaned_realtime_data.csv.gz")
+    hist_raw = os.path.join(DATA_DIR, "cleaned_historical_data.csv")
+    rt_raw   = os.path.join(DATA_DIR, "cleaned_realtime_data.csv")
     frames = []
+    
     if os.path.exists(hist): frames.append(pd.read_csv(hist))
-    if os.path.exists(rt):   frames.append(pd.read_csv(rt))
+    elif os.path.exists(hist_raw): frames.append(pd.read_csv(hist_raw))
+    
+    if os.path.exists(rt): frames.append(pd.read_csv(rt))
+    elif os.path.exists(rt_raw): frames.append(pd.read_csv(rt_raw))
+    
     if frames:
         _df = pd.concat(frames, ignore_index=True).drop_duplicates(subset=["Container_ID"])
         _df["Risk_Score"] = pd.to_numeric(_df["Risk_Score"], errors="coerce").fillna(0)
