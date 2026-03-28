@@ -4,12 +4,11 @@ pydantic
 pandas
 supabase
 python-multipart
-axios
 python-dotenv
 joblib
 scikit-learn
-framer-motion
-lucide-react
 reportlab
 resend
-ai_explanations
+gunicorn
+uvloop
+httptools
