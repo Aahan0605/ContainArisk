@@ -71,21 +71,38 @@ function ContainersContent() {
     let alive = true;
     setLoading(true);
     setError(null);
+    
     fetch(getUrl(filter, page))
-      .then(r => r.json())
+      .then(async (r) => {
+        if (!r.ok) {
+          throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+        }
+        const text = await r.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          throw new Error(`Invalid JSON response: ${text.substring(0, 100)}`);
+        }
+      })
       .then(data => {
         if (!alive) return;
-        const list = (data.data || []).map(normalize);
+        if (!data || typeof data !== 'object') {
+          throw new Error('Invalid response format');
+        }
+        const list = Array.isArray(data.data) ? data.data.map(normalize) : [];
         setRows(list);
         setTotal(data.total || list.length);
         setLoading(false);
       })
       .catch(err => {
         if (!alive) return;
+        console.error('Fetch error:', err);
         setError(err?.message || String(err));
         setRows([]);
+        setTotal(0);
         setLoading(false);
       });
+    
     return () => { alive = false; };
   }, [filter, page]);
 
@@ -163,7 +180,21 @@ function ContainersContent() {
                   </tr>
                 ))
               ) : error ? (
-                <tr><td colSpan={11} className="px-4 py-16 text-center text-rose-400 text-sm">Error: {error}</td></tr>
+                <tr><td colSpan={11} className="px-4 py-8">
+                  <div className="text-center">
+                    <p className="text-rose-400 text-sm font-semibold mb-4">Failed to load containers</p>
+                    <p className="text-slate-500 text-xs mb-4">{error}</p>
+                    <button 
+                      onClick={() => {
+                        setLoading(true);
+                        setError(null);
+                      }}
+                      className="px-4 py-2 text-xs font-bold rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 transition-all"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                </td></tr>
               ) : filtered.length === 0 ? (
                 <tr><td colSpan={11} className="px-4 py-16 text-center text-slate-500 text-sm">No containers found.</td></tr>
               ) : (
