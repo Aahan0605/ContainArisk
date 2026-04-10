@@ -18,11 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY backend/requirements.txt /app/requirements.txt
 
 # Install the Python dependencies
-# We will clean the requirements.txt during implementation, but let's assume it's valid now
 RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copy the data folder (important for keeping the 54k records)
-COPY data /app/data
 
 # Copy the backend source code
 COPY backend /app/backend
@@ -32,6 +28,10 @@ EXPOSE 7860
 
 # Add a non-root user for security (required by Hugging Face)
 RUN useradd -m -u 1000 user
+
+# Give the user ownership of the /app directory so it can download/write data files
+RUN chown -R user:user /app
+
 USER user
 ENV HOME=/home/user \
 	PATH=/home/user/.local/bin:$PATH

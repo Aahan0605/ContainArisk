@@ -27,57 +27,77 @@ logger = logging.getLogger(__name__)
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "datasets", "hackooo")
 _df: pd.DataFrame = pd.DataFrame()
 
+
 def _load_csv():
     global _df
     hist = os.path.join(DATA_DIR, "cleaned_historical_data.csv.gz")
-    rt   = os.path.join(DATA_DIR, "cleaned_realtime_data.csv.gz")
+    rt = os.path.join(DATA_DIR, "cleaned_realtime_data.csv.gz")
     hist_raw = os.path.join(DATA_DIR, "cleaned_historical_data.csv")
-    rt_raw   = os.path.join(DATA_DIR, "cleaned_realtime_data.csv")
+    rt_raw = os.path.join(DATA_DIR, "cleaned_realtime_data.csv")
+    hist_url = "https://raw.githubusercontent.com/aahan0605/containArisk/main/data/datasets/hackooo/cleaned_historical_data.csv"
+    rt_url = "https://raw.githubusercontent.com/aahan0605/containArisk/main/data/datasets/hackooo/cleaned_realtime_data.csv"
     frames = []
-    
-    if os.path.exists(hist): frames.append(pd.read_csv(hist))
-    elif os.path.exists(hist_raw): frames.append(pd.read_csv(hist_raw))
-    
-    if os.path.exists(rt): frames.append(pd.read_csv(rt))
-    elif os.path.exists(rt_raw): frames.append(pd.read_csv(rt_raw))
-    
+
+    if os.path.exists(hist):
+        frames.append(pd.read_csv(hist))
+    elif os.path.exists(hist_raw):
+        frames.append(pd.read_csv(hist_raw))
+    else:
+        logger.info("Fetching historical data from GitHub...")
+        frames.append(pd.read_csv(hist_url))
+
+    if os.path.exists(rt):
+        frames.append(pd.read_csv(rt))
+    elif os.path.exists(rt_raw):
+        frames.append(pd.read_csv(rt_raw))
+    else:
+        logger.info("Fetching realtime data from GitHub...")
+        frames.append(pd.read_csv(rt_url))
+
     if frames:
-        _df = pd.concat(frames, ignore_index=True).drop_duplicates(subset=["Container_ID"])
+        _df = pd.concat(frames, ignore_index=True).drop_duplicates(
+            subset=["Container_ID"]
+        )
         _df["Risk_Score"] = pd.to_numeric(_df["Risk_Score"], errors="coerce").fillna(0)
         logger.info(f"CSV loaded: {len(_df)} unique containers")
 
+
 def _risk_level(score: float) -> str:
-    if score >= 85: return "CRITICAL"
-    if score >= 70: return "HIGH"
-    if score >= 40: return "MEDIUM"
+    if score >= 85:
+        return "CRITICAL"
+    if score >= 70:
+        return "HIGH"
+    if score >= 40:
+        return "MEDIUM"
     return "LOW"
+
 
 def _df_to_container(row) -> dict:
     score = float(row.get("Risk_Score", 0))
     level = str(row.get("Risk_Level", "")).strip().upper() or _risk_level(score)
     return {
-        "container_id":             str(row.get("Container_ID", "")),
-        "importer":                 str(row.get("Importer_ID", "")),
-        "exporter":                 str(row.get("Exporter_ID", "")),
-        "origin":                   str(row.get("Origin_Country", "")),
-        "destination":              str(row.get("Destination_Country", "")),
-        "destination_port":         str(row.get("Destination_Port", "")),
-        "hs_code":                  str(row.get("HS_Code", "")),
-        "weight":                   float(row.get("Measured_Weight") or 0),
-        "declared_weight":          float(row.get("Declared_Weight") or 0),
-        "value":                    float(row.get("Declared_Value") or 0),
-        "declared_value":           float(row.get("Declared_Value") or 0),
-        "risk_score":               score,
-        "risk_level":               level,
-        "clearance_status":         str(row.get("Clearance_Status", "")),
-        "shipping_line":            str(row.get("Shipping_Line", "")),
-        "dwell_time_hours":         float(row.get("Dwell_Time_Hours") or 0),
-        "declaration_date":         str(row.get("Declaration_Date", "")),
-        "trade_regime":             str(row.get("Trade_Regime", "")),
-        "entity_trust_score":       float(row.get("entity_trust_score") or 0),
+        "container_id": str(row.get("Container_ID", "")),
+        "importer": str(row.get("Importer_ID", "")),
+        "exporter": str(row.get("Exporter_ID", "")),
+        "origin": str(row.get("Origin_Country", "")),
+        "destination": str(row.get("Destination_Country", "")),
+        "destination_port": str(row.get("Destination_Port", "")),
+        "hs_code": str(row.get("HS_Code", "")),
+        "weight": float(row.get("Measured_Weight") or 0),
+        "declared_weight": float(row.get("Declared_Weight") or 0),
+        "value": float(row.get("Declared_Value") or 0),
+        "declared_value": float(row.get("Declared_Value") or 0),
+        "risk_score": score,
+        "risk_level": level,
+        "clearance_status": str(row.get("Clearance_Status", "")),
+        "shipping_line": str(row.get("Shipping_Line", "")),
+        "dwell_time_hours": float(row.get("Dwell_Time_Hours") or 0),
+        "declaration_date": str(row.get("Declaration_Date", "")),
+        "trade_regime": str(row.get("Trade_Regime", "")),
+        "entity_trust_score": float(row.get("entity_trust_score") or 0),
         "weight_deviation_percent": float(row.get("weight_deviation_percent") or 0),
-        "seal_tamper_prob":         float(row.get("seal_tamper_prob") or 0),
-        "tax_evasion_prob":         float(row.get("tax_evasion_prob") or 0),
+        "seal_tamper_prob": float(row.get("seal_tamper_prob") or 0),
+        "tax_evasion_prob": float(row.get("tax_evasion_prob") or 0),
     }
 
 
@@ -323,20 +343,51 @@ def _build_container_list(response_data):
     return containers
 
 
-async def _filtered_containers(page, limit, level: str = None, gte=None, lte=None, lt=None):
+async def _filtered_containers(
+    page, limit, level: str = None, gte=None, lte=None, lt=None
+):
     if _df.empty:
         return {"data": [], "total": 0, "page": page, "limit": limit, "total_pages": 0}
-    if level:
-        filtered = _df[_df["Risk_Level"].str.strip().str.upper() == level.upper()].sort_values("Risk_Score", ascending=False)
+
+    # Ensure Risk_Level exists, using derived level if missing
+    df_copy = _df.copy()
+    if "Risk_Level" not in df_copy.columns:
+        df_copy["Risk_Level"] = df_copy["Risk_Score"].apply(_risk_level)
     else:
-        mask = pd.Series([True] * len(_df), index=_df.index)
-        if gte is not None: mask &= _df["Risk_Score"] >= gte
-        if lte is not None: mask &= _df["Risk_Score"] <= lte
-        if lt  is not None: mask &= _df["Risk_Score"] <  lt
-        filtered = _df[mask].sort_values("Risk_Score", ascending=False)
+        # Fill missing Risk_Level values with derived level
+        mask = df_copy["Risk_Level"].isna() | (
+            df_copy["Risk_Level"].astype(str).str.strip() == ""
+        )
+        df_copy.loc[mask, "Risk_Level"] = df_copy.loc[mask, "Risk_Score"].apply(
+            _risk_level
+        )
+
+    if level:
+        # Safely filter by level, handling NaN and non-string values
+        try:
+            filtered = df_copy[
+                df_copy["Risk_Level"].astype(str).str.strip().str.upper()
+                == level.upper()
+            ].sort_values("Risk_Score", ascending=False)
+        except Exception:
+            # Fallback: derive level for all rows and filter
+            df_copy["derived_level"] = df_copy["Risk_Score"].apply(_risk_level)
+            filtered = df_copy[df_copy["derived_level"] == level.upper()].sort_values(
+                "Risk_Score", ascending=False
+            )
+    else:
+        mask = pd.Series([True] * len(df_copy), index=df_copy.index)
+        if gte is not None:
+            mask &= df_copy["Risk_Score"] >= gte
+        if lte is not None:
+            mask &= df_copy["Risk_Score"] <= lte
+        if lt is not None:
+            mask &= df_copy["Risk_Score"] < lt
+        filtered = df_copy[mask].sort_values("Risk_Score", ascending=False)
+
     total = len(filtered)
     offset = (page - 1) * limit
-    page_df = filtered.iloc[offset: offset + limit]
+    page_df = filtered.iloc[offset : offset + limit]
     return {
         "data": [_df_to_container(row) for _, row in page_df.iterrows()],
         "total": total,
@@ -384,13 +435,40 @@ async def get_containers_by_country(
     """Return containers travelling TO a specific country, optionally filtered by risk level."""
     if _df.empty:
         return {"data": [], "total": 0, "page": page, "limit": limit, "total_pages": 0}
-    mask = _df["Destination_Country"].str.strip().str.upper() == country.strip().upper()
+
+    df_copy = _df.copy()
+    # Ensure Risk_Level exists
+    if "Risk_Level" not in df_copy.columns:
+        df_copy["Risk_Level"] = df_copy["Risk_Score"].apply(_risk_level)
+    else:
+        mask_nan = df_copy["Risk_Level"].isna() | (
+            df_copy["Risk_Level"].astype(str).str.strip() == ""
+        )
+        df_copy.loc[mask_nan, "Risk_Level"] = df_copy.loc[mask_nan, "Risk_Score"].apply(
+            _risk_level
+        )
+
+    try:
+        mask = (
+            df_copy["Destination_Country"].astype(str).str.strip().str.upper()
+            == country.strip().upper()
+        )
+    except Exception:
+        mask = pd.Series([False] * len(df_copy), index=df_copy.index)
+
     if risk_level:
-        mask &= _df["Risk_Level"].str.strip().str.upper() == risk_level.strip().upper()
-    filtered = _df[mask].sort_values("Risk_Score", ascending=False)
+        try:
+            mask &= (
+                df_copy["Risk_Level"].astype(str).str.strip().str.upper()
+                == risk_level.strip().upper()
+            )
+        except Exception:
+            mask = pd.Series([False] * len(df_copy), index=df_copy.index)
+
+    filtered = df_copy[mask].sort_values("Risk_Score", ascending=False)
     total = len(filtered)
     offset = (page - 1) * limit
-    page_df = filtered.iloc[offset: offset + limit]
+    page_df = filtered.iloc[offset : offset + limit]
     return {
         "data": [_df_to_container(row) for _, row in page_df.iterrows()],
         "total": total,
@@ -818,19 +896,26 @@ async def ai_explanation_endpoint(container_id: str):
 @app.get("/summary")
 async def get_summary():
     if _df.empty:
-        return {"total_containers": 0, "critical": 0, "high_risk": 0, "medium": 0, "low_risk": 0, "anomalies": 0}
-    total    = len(_df)
+        return {
+            "total_containers": 0,
+            "critical": 0,
+            "high_risk": 0,
+            "medium": 0,
+            "low_risk": 0,
+            "anomalies": 0,
+        }
+    total = len(_df)
     rl = _df["Risk_Level"].str.strip().str.upper()
     critical = int((rl == "CRITICAL").sum())
-    high     = int((rl == "HIGH").sum())
-    medium   = int((rl == "MEDIUM").sum())
-    low      = int((rl == "LOW").sum())
+    high = int((rl == "HIGH").sum())
+    medium = int((rl == "MEDIUM").sum())
+    low = int((rl == "LOW").sum())
     return {
         "total_containers": total,
-        "critical":  critical,
+        "critical": critical,
         "high_risk": high,
-        "medium":    medium,
-        "low_risk":  low,
+        "medium": medium,
+        "low_risk": low,
         "anomalies": critical + high,
     }
 
@@ -898,15 +983,15 @@ async def get_container_details(id: str):
     score = float(row.get("Risk_Score", 0))
     return {
         **c,
-        "declared_weight":      float(row.get("Declared_Weight") or 0),
-        "destination_port":     str(row.get("Destination_Port", "")),
-        "risk_score":           score / 100.0,
-        "risk_level":           c["risk_level"],
-        "entity_trust_score":   float(row.get("entity_trust_score") or 0),
+        "declared_weight": float(row.get("Declared_Weight") or 0),
+        "destination_port": str(row.get("Destination_Port", "")),
+        "risk_score": score / 100.0,
+        "risk_level": c["risk_level"],
+        "entity_trust_score": float(row.get("entity_trust_score") or 0),
         "weight_deviation_percent": float(row.get("weight_deviation_percent") or 0),
-        "seal_tamper_prob":     float(row.get("seal_tamper_prob") or 0),
-        "tax_evasion_prob":     float(row.get("tax_evasion_prob") or 0),
-        "explanations":         [],
+        "seal_tamper_prob": float(row.get("seal_tamper_prob") or 0),
+        "tax_evasion_prob": float(row.get("tax_evasion_prob") or 0),
+        "explanations": [],
     }
 
 
@@ -965,7 +1050,14 @@ async def get_importer_risk():
 @app.get("/trade-routes")
 async def get_trade_routes():
     if _df.empty:
-        return {"routes": [], "stats": {"active_routes": 0, "high_risk_routes": 0, "tracked_countries": 0}}
+        return {
+            "routes": [],
+            "stats": {
+                "active_routes": 0,
+                "high_risk_routes": 0,
+                "tracked_countries": 0,
+            },
+        }
     try:
         coords = {
             "PH": [12.8797, 121.774],
@@ -1068,8 +1160,8 @@ async def get_trade_routes():
 
         for _, row in _df.iterrows():
             origin = str(row.get("Origin_Country", "Unknown"))
-            dest   = str(row.get("Destination_Country", "Unknown"))
-            cid    = str(row.get("Container_ID", "Unknown"))
+            dest = str(row.get("Destination_Country", "Unknown"))
+            cid = str(row.get("Container_ID", "Unknown"))
             risk_val = float(row.get("Risk_Score", 0))
 
             # Skip missing mappings
@@ -1103,7 +1195,9 @@ async def get_trade_routes():
                 routes_dict[route_id]["max_risk"] = risk_val
 
         # Assign risk levels by splitting routes into quartiles by max_risk
-        routes_list = sorted(routes_dict.values(), key=lambda x: x["max_risk"], reverse=True)
+        routes_list = sorted(
+            routes_dict.values(), key=lambda x: x["max_risk"], reverse=True
+        )
         n = len(routes_list)
         for i, rd in enumerate(routes_list):
             pct = i / max(n - 1, 1)  # 0 = highest risk, 1 = lowest
@@ -1117,7 +1211,9 @@ async def get_trade_routes():
                 rd["risk"] = "medium"
             else:
                 rd["risk"] = "low"
-            rd["avg_risk"] = round(rd["risk_score"] / rd["count"], 2) if rd["count"] else 0
+            rd["avg_risk"] = (
+                round(rd["risk_score"] / rd["count"], 2) if rd["count"] else 0
+            )
 
         # Sort by risk descending and return top N for map visual
         routes_list.sort(key=lambda x: x["max_risk"], reverse=True)
@@ -1132,7 +1228,14 @@ async def get_trade_routes():
         }
     except Exception as e:
         logger.error(f"Error fetching trade routes: {e}")
-        return {"routes": [], "stats": {"active_routes": 0, "high_risk_routes": 0, "tracked_countries": 0}}
+        return {
+            "routes": [],
+            "stats": {
+                "active_routes": 0,
+                "high_risk_routes": 0,
+                "tracked_countries": 0,
+            },
+        }
 
 
 @app.get("/risk-heatmap")
@@ -1322,7 +1425,9 @@ async def send_container_report(id: str, request: EmailReportRequest):
     }
 
     indicators = analyze_risk_indicators(r)
-    recommendation = get_recommendation(risk_score * 100 if risk_score <= 1.0 else risk_score)
+    recommendation = get_recommendation(
+        risk_score * 100 if risk_score <= 1.0 else risk_score
+    )
     pdf_bytes = generate_report_pdf(container_data, indicators, recommendation)
 
     result = send_report_email(
@@ -1447,27 +1552,49 @@ async def get_trade_network():
     try:
         edges_dict: dict = {}
         for _, row in _df.iterrows():
-            imp  = str(row.get("Importer_ID", "") or "")
-            exp  = str(row.get("Exporter_ID", "") or "")
+            imp = str(row.get("Importer_ID", "") or "")
+            exp = str(row.get("Exporter_ID", "") or "")
             risk = float(row.get("Risk_Score", 0))
-            if imp and exp and imp not in ("Unknown", "nan", "") and exp not in ("Unknown", "nan", ""):
+            if (
+                imp
+                and exp
+                and imp not in ("Unknown", "nan", "")
+                and exp not in ("Unknown", "nan", "")
+            ):
                 eid = f"{exp}||{imp}"
                 if eid not in edges_dict:
-                    edges_dict[eid] = {"source": exp, "target": imp, "weight": 0, "risks": []}
+                    edges_dict[eid] = {
+                        "source": exp,
+                        "target": imp,
+                        "weight": 0,
+                        "risks": [],
+                    }
                 edges_dict[eid]["weight"] += 1
                 edges_dict[eid]["risks"].append(risk)
 
         # Sort edges by weight descending, pick top edges, collect nodes from them
-        sorted_edges = sorted(edges_dict.values(), key=lambda x: x["weight"], reverse=True)
+        sorted_edges = sorted(
+            edges_dict.values(), key=lambda x: x["weight"], reverse=True
+        )
 
         # First pass: collect top 6 nodes from highest-weight edges
         selected_nodes: dict = {}
         for e in sorted_edges:
             src, tgt = e["source"], e["target"]
             if src not in selected_nodes:
-                selected_nodes[src] = {"id": src, "group": "Exporter", "risks": [], "count": 0}
+                selected_nodes[src] = {
+                    "id": src,
+                    "group": "Exporter",
+                    "risks": [],
+                    "count": 0,
+                }
             if tgt not in selected_nodes:
-                selected_nodes[tgt] = {"id": tgt, "group": "Importer", "risks": [], "count": 0}
+                selected_nodes[tgt] = {
+                    "id": tgt,
+                    "group": "Importer",
+                    "risks": [],
+                    "count": 0,
+                }
             selected_nodes[src]["risks"].extend(e["risks"])
             selected_nodes[src]["count"] += e["weight"]
             selected_nodes[tgt]["risks"].extend(e["risks"])
@@ -1482,12 +1609,26 @@ async def get_trade_network():
             src, tgt = e["source"], e["target"]
             if src in final_node_ids and tgt in final_node_ids:
                 avg_risk = sum(e["risks"]) / len(e["risks"])
-                selected_edges.append({"source": src, "target": tgt, "val": e["weight"], "risk": round(avg_risk, 2)})
+                selected_edges.append(
+                    {
+                        "source": src,
+                        "target": tgt,
+                        "val": e["weight"],
+                        "risk": round(avg_risk, 2),
+                    }
+                )
             if len(selected_edges) >= 8:
                 break
 
-        nodes = [{"id": v["id"], "group": v["group"], "val": v["count"],
-                  "risk": round(sum(v["risks"]) / len(v["risks"]), 2)} for v in selected_nodes.values()]
+        nodes = [
+            {
+                "id": v["id"],
+                "group": v["group"],
+                "val": v["count"],
+                "risk": round(sum(v["risks"]) / len(v["risks"]), 2),
+            }
+            for v in selected_nodes.values()
+        ]
         return {"nodes": nodes[:6], "edges": selected_edges[:8]}
     except Exception as e:
         logger.error(f"Error fetching trade network: {e}")
@@ -1501,15 +1642,31 @@ async def get_risk_trends():
         return []
     try:
         df = _df.copy()
-        df["month"] = pd.to_datetime(df["Declaration_Date"], errors="coerce").dt.to_period("M").astype(str)
+        df["month"] = (
+            pd.to_datetime(df["Declaration_Date"], errors="coerce")
+            .dt.to_period("M")
+            .astype(str)
+        )
         df = df[df["month"].notna() & (df["month"] != "NaT")]
-        grouped = df.groupby("month").agg(
-            total=("Container_ID", "count"),
-            high_risk=("Risk_Score", lambda x: (x >= 70).sum()),
-            avg_risk=("Risk_Score", "mean")
-        ).reset_index()
+        grouped = (
+            df.groupby("month")
+            .agg(
+                total=("Container_ID", "count"),
+                high_risk=("Risk_Score", lambda x: (x >= 70).sum()),
+                avg_risk=("Risk_Score", "mean"),
+            )
+            .reset_index()
+        )
         grouped = grouped.sort_values("month").tail(12)
-        return [{"date": r["month"], "total": int(r["total"]), "high_risk": int(r["high_risk"]), "avg_risk": round(float(r["avg_risk"]), 1)} for _, r in grouped.iterrows()]
+        return [
+            {
+                "date": r["month"],
+                "total": int(r["total"]),
+                "high_risk": int(r["high_risk"]),
+                "avg_risk": round(float(r["avg_risk"]), 1),
+            }
+            for _, r in grouped.iterrows()
+        ]
     except Exception as e:
         logger.error(f"Error fetching risk trends: {e}")
         return []

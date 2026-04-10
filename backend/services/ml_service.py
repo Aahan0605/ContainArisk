@@ -17,8 +17,8 @@ from typing import List
 
 logger = logging.getLogger(__name__)
 
-# Import the core ML functions from the risk_engine in the app package
-from app.risk_engine import predict_risk, predict_risk_batch, load_model
+# Import the core ML functions from the risk_engine module
+from services.risk_engine import predict_risk, predict_risk_batch, load_model
 
 
 def startup_load_model():
@@ -78,9 +78,11 @@ def predict_batch(shipments: List[dict]) -> List[dict]:
     for risk in risk_results:
         risk_score = risk["Risk_Score"]
         prediction = "anomaly" if risk_score >= 50 else "normal"
-        results.append({
-            "prediction": prediction,
-            "risk_score": risk_score,
-        })
+        results.append(
+            {
+                "prediction": prediction,
+                "risk_score": risk_score,
+            }
+        )
 
     return results

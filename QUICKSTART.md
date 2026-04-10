@@ -35,7 +35,7 @@ This guide will help you get **ContainArisk** up and running on your local machi
    ```
 3. Install dependencies:
    ```bash
-   pip install -r ../requirements.txt
+   pip install -r requirements.txt
    ```
 4. Start the server:
    ```bash
