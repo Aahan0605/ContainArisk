@@ -39,20 +39,20 @@ def _load_csv():
     frames = []
 
     if os.path.exists(hist):
-        frames.append(pd.read_csv(hist))
+        frames.append(pd.read_csv(hist, low_memory=False))
     elif os.path.exists(hist_raw):
-        frames.append(pd.read_csv(hist_raw))
+        frames.append(pd.read_csv(hist_raw, low_memory=False))
     else:
         logger.info("Fetching historical data from GitHub...")
-        frames.append(pd.read_csv(hist_url))
+        frames.append(pd.read_csv(hist_url, low_memory=False))
 
     if os.path.exists(rt):
-        frames.append(pd.read_csv(rt))
+        frames.append(pd.read_csv(rt, low_memory=False))
     elif os.path.exists(rt_raw):
-        frames.append(pd.read_csv(rt_raw))
+        frames.append(pd.read_csv(rt_raw, low_memory=False))
     else:
         logger.info("Fetching realtime data from GitHub...")
-        frames.append(pd.read_csv(rt_url))
+        frames.append(pd.read_csv(rt_url, low_memory=False))
 
     if frames:
         _df = pd.concat(frames, ignore_index=True).drop_duplicates(
