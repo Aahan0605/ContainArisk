@@ -1,11 +1,10 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "backend/Dockerfile"
+    "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd backend && gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 main:app",
+    "startCommand": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120 main:app",
     "healthcheckPath": "/health",
     "restartPolicyType": "ON_FAILURE"
   }

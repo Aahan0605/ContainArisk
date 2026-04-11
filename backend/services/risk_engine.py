@@ -16,13 +16,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Paths
+# Paths — support two layouts:
+#   1. Railway (root = backend/):  ml/ lives at backend/ml/
+#   2. Local dev (root = project): ml/ lives at ../../ml/
 # ---------------------------------------------------------------------------
-# project root: backend/app/risk_engine.py -> ../../ = project root
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_BACKEND_DIR = Path(__file__).resolve().parent.parent
+_PROJECT_ROOT = _BACKEND_DIR.parent
 
-# Add the ml/preprocessing/ directory to sys.path so we can import feature_engineering
-_ML_DIR = _PROJECT_ROOT / "ml" / "preprocessing"
+_ML_BASE = _BACKEND_DIR / "ml" if (_BACKEND_DIR / "ml").exists() else _PROJECT_ROOT / "ml"
+
+_ML_DIR = _ML_BASE / "preprocessing"
 if str(_ML_DIR) not in sys.path:
     sys.path.insert(0, str(_ML_DIR))
 
@@ -34,8 +37,8 @@ from feature_engineering import (
     TARGET_COLUMN,
 )
 
-_MODEL_PATH = _PROJECT_ROOT / "ml" / "models" / "anomaly_detection_model.pkl"
-_STATS_PATH = _PROJECT_ROOT / "ml" / "models" / "feature_stats.pkl"
+_MODEL_PATH = _ML_BASE / "models" / "anomaly_detection_model.pkl"
+_STATS_PATH = _ML_BASE / "models" / "feature_stats.pkl"
 
 # Lazy-loaded singletons
 _model = None
@@ -100,21 +103,10 @@ def _score_to_level(score_0_100: float) -> str:
 # ---------------------------------------------------------------------------
 
 def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Apply feature engineering in inference mode and return the feature matrix
-    ready for model prediction.
-    """
     stats = _get_stats()
-
-    # The feature engineering expects raw 16-column CSV data.
-    # Apply feature engineering in inference mode (fit_mode=False)
     df_feat, _ = engineer_features(df, stats=stats, fit_mode=False)
-
-    # Get all feature columns except the target
     feature_cols = [c for c in df_feat.columns if c != TARGET_COLUMN]
-    X = df_feat[feature_cols]
-
-    return X
+    return df_feat[feature_cols]
 
 
 # ---------------------------------------------------------------------------
@@ -122,29 +114,14 @@ def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 def predict_risk(row: dict) -> dict:
-    """
-    Run ML inference on a single container record.
-
-    Parameters
-    ----------
-    row : dict
-        Must contain the 16 raw CSV columns (Container_ID, Declaration_Date,
-        Declaration_Time, Trade_Regime, Origin_Country, etc.)
-
-    Returns
-    -------
-    dict with keys 'Risk_Score' (float, 0-100) and 'Risk_Level' (str)
-    """
     model = _get_model()
 
-    # Normalise column names that may differ between API and CSV format
     row = dict(row)
     if "Declaration_Date" in row and "Declaration_Date (YYYY-MM-DD)" not in row:
         row["Declaration_Date (YYYY-MM-DD)"] = row["Declaration_Date"]
     if "Trade_Regime" in row and "Trade_Regime (Import / Export / Transit)" not in row:
         row["Trade_Regime (Import / Export / Transit)"] = row["Trade_Regime"]
 
-    # Ensure numeric fields have defaults
     for key in ["Declared_Value", "Declared_Weight", "Measured_Weight", "Dwell_Time_Hours"]:
         if key not in row or row[key] is None:
             row[key] = 0.0
@@ -154,9 +131,8 @@ def predict_risk(row: dict) -> dict:
             except (ValueError, TypeError):
                 row[key] = 0.0
 
-    # Ensure string fields have defaults
     for key in ["Origin_Country", "Destination_Country", "Destination_Port",
-                 "Importer_ID", "Exporter_ID", "Shipping_Line", "Clearance_Status"]:
+                "Importer_ID", "Exporter_ID", "Shipping_Line", "Clearance_Status"]:
         if key not in row or row[key] is None:
             row[key] = "Unknown"
 
@@ -170,9 +146,8 @@ def predict_risk(row: dict) -> dict:
     df = pd.DataFrame([row])
     X = _prepare_features(df)
 
-    # Get prediction probability
     proba = model.predict_proba(X)[:, 1]
-    risk_score = float(proba[0]) * 100  # 0-100
+    risk_score = float(proba[0]) * 100
 
     return {
         "Risk_Score": round(risk_score, 2),
@@ -181,17 +156,11 @@ def predict_risk(row: dict) -> dict:
 
 
 def predict_risk_batch(rows: list[dict]) -> list[dict]:
-    """
-    Run ML inference on a list of container records efficiently (batch mode).
-
-    Returns a list of dicts, each with 'Risk_Score' and 'Risk_Level'.
-    """
     if not rows:
         return []
 
     model = _get_model()
 
-    # Normalise column names and set defaults
     normalised = []
     for r in rows:
         r2 = dict(r)
@@ -210,11 +179,11 @@ def predict_risk_batch(rows: list[dict]) -> list[dict]:
                     r2[key] = 0.0
 
         for key in ["Origin_Country", "Destination_Country", "Destination_Port",
-                     "Importer_ID", "Exporter_ID", "Shipping_Line"]:
+                    "Importer_ID", "Exporter_ID", "Shipping_Line"]:
             if key not in r2 or r2[key] is None:
                 r2[key] = "Unknown"
 
-        if "HS_Code" not in r2 or r2["HS_Code"] is None:
+        if "HS_Code" not in r2 or r2[key] is None:
             r2["HS_Code"] = 0
         if "Declaration_Time" not in r2 or r2["Declaration_Time"] is None:
             r2["Declaration_Time"] = "12:00:00"
@@ -226,7 +195,6 @@ def predict_risk_batch(rows: list[dict]) -> list[dict]:
     df = pd.DataFrame(normalised)
     X = _prepare_features(df)
 
-    # Get prediction probabilities
     proba = model.predict_proba(X)[:, 1]
     scores = (proba * 100).round(2)
 
