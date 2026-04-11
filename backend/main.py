@@ -1745,6 +1745,11 @@ async def get_intelligence_insights():
         return []
 
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "containers_loaded": len(_df)}
+
+
 if __name__ == "__main__":
     import uvicorn
 
